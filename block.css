@@ -3,3 +3,10 @@
     padding: 20px;
     background: #f9f9f9;
 }
+.canvas-container {
+    text-align: center;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

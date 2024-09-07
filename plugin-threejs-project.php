@@ -28,6 +28,11 @@ function register_threejs_project_block() {
         filemtime( plugin_dir_path( __FILE__ ) . 'block.css' )
     );
 
+     // Pass the plugin URL to the script
+     wp_localize_script( 'threejs-project-block', 'threejsBlockData', array(
+        'iconUrl' => plugins_url( 'icon.png', __FILE__ ),
+    ) );
+
     // Register the block
     register_block_type( 'custom/threejs-project', array(
         'editor_script' => 'threejs-project-block',
@@ -87,7 +92,7 @@ function render_threejs_project($attributes) {
     // Set a default value for modelUrl if it isn't provided
     $model_url = isset($attributes['modelUrl']) && !empty($attributes['modelUrl']) 
         ? esc_url($attributes['modelUrl']) 
-        : 'http://lavitz.local/wp-content/uploads/2024/09/Tree.glb'; // Default URL
+        : '/wp-content/uploads/2024/09/Tree.glb'; // Default URL
     $file_type = isset($attributes['fileType']) ? $attributes['fileType'] : 'glb'; // Default to GLB
 
     ob_start();
@@ -98,12 +103,14 @@ function render_threejs_project($attributes) {
     <script>
         const canvas = document.getElementById('canvas');
         var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5;
+        var camera = new THREE.PerspectiveCamera(75, 16/9, 0.1, 1000);
+        camera.position.z = 15;
+        camera.position.y = 5;
+        camera.position.x = 5;
 
         var renderer = new THREE.WebGLRenderer({canvas:canvas, alpha: true});
         renderer.setClearColor( 0x000000, 0 );
-        renderer.setSize(window.innerWidth * 0.8, window.innerHeight * 0.8);
+        renderer.setSize(512, 288);
         renderer.setPixelRatio(window.devicePixelRatio);
 
         // Set up the loader based on file type

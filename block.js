@@ -11,7 +11,7 @@
         attributes: {
             modelUrl: {
                 type: 'string',
-                default: 'http://lavitz.local/wp-content/uploads/2024/09/Tree.glb',
+                default: '/wp-content/uploads/2024/09/Tree.glb',
             },
             fileType: {
                 type: 'string',
@@ -40,8 +40,25 @@
                         })
                     )
                 ),
-                el( 'div', useBlockProps(),
-                    el('p', {}, 'Three.js project will be rendered here.')
+                el('div', useBlockProps(),
+                    el('div', {
+                        style: {
+                            border: '2px dashed #ddd',
+                            padding: '20px',
+                            textAlign: 'center',
+                            color: '#24566E',
+                            fontSize: '1.25em',
+                        }
+                    },
+                    el('p', {}, 'Three.js Wordpress Plugin by Starscape'),
+                    el('img', {
+                        src: threejsBlockData.iconUrl, // Replace with an appropriate icon or image URL
+                        alt: '3D Model Icon',
+                        style: {
+                            maxWidth: '100px',
+                            marginTop: '10px',
+                        }
+                    }))
                 )
             ];
         },
