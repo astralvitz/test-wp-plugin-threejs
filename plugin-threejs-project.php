@@ -104,6 +104,11 @@ function render_threejs_project($attributes) {
     $renderer_width = isset($attributes['rendererWidth']) ? esc_attr($attributes['rendererWidth']) : 512; // Default Width
     $renderer_height = isset($attributes['rendererHeight']) ? esc_attr($attributes['rendererHeight']) : 288; // Default Height
 
+    $enable_damping = isset($attributes['enableDamping']) ? esc_attr($attributes['enableDamping']) : true;
+    $damping_factor = isset($attributes['dampingFactor']) ? esc_attr($attributes['dampingFactor']) : 0.25;
+    $enable_zoom = isset($attributes['enableZoom']) ? esc_attr($attributes['enableZoom']) : true;
+    $enable_pan = isset($attributes['enablePan']) ? esc_attr($attributes['enablePan']) : true;
+
     ob_start();
     ?>
     <div class='canvas-container'>
@@ -154,10 +159,10 @@ function render_threejs_project($attributes) {
         scene.add(ambientLight);
 
         var controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.25;
-        controls.enableZoom = true;
-        controls.enablePan = true;
+        controls.enableDamping = <?php echo $enable_damping ? 'true' : 'false'; ?>;
+        controls.dampingFactor = <?php echo $damping_factor; ?>;
+        controls.enableZoom = <?php echo $enable_zoom ? 'true' : 'false'; ?>;
+        controls.enablePan = <?php echo $enable_pan ? 'true' : 'false'; ?>;
 
         var animate = function () {
             requestAnimationFrame(animate);

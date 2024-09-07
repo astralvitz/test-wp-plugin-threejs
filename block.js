@@ -2,7 +2,7 @@
     const el = element.createElement;
     const { useBlockProps, MediaUpload, MediaUploadCheck } = editor;
     const { InspectorControls } = editor;
-    const { PanelBody, TextControl, SelectControl, RangeControl } = wp.components;
+    const { PanelBody, TextControl, SelectControl, RangeControl, ToggleControl } = wp.components;
 
     blocks.registerBlockType( 'custom/threejs-project', {
         title: 'Three.js Project',
@@ -44,7 +44,23 @@
             rendererHeight: {
                 type: 'number',
                 default: 288,
-            }
+            },
+            enableDamping: {
+                type: 'boolean',
+                default: true,
+            },
+            dampingFactor: {
+                type: 'number',
+                default: 0.25,
+            },
+            enableZoom: {
+                type: 'boolean',
+                default: true,
+            },
+            enablePan: {
+                type: 'boolean',
+                default: true,
+            },
         },
         edit: ( props ) => {
             const {
@@ -52,14 +68,15 @@
                     modelUrl, fileType,
                     cameraFov, cameraAspectRatio,
                     cameraPositionX, cameraPositionY, cameraPositionZ,
-                    rendererWidth, rendererHeight
+                    rendererWidth, rendererHeight,
+                    enableDamping, dampingFactor, enableZoom, enablePan
                 },
                 setAttributes
             } = props;
 
             return [
                 el( InspectorControls, null,
-                    el( PanelBody, { title: 'Three.js Settings' },
+                    el( PanelBody, { title: 'Three.js Model Settings' },
                         el('div', { style: { marginBottom: '20px' } },  // Add margin-bottom here
                             el(MediaUploadCheck, {},
                                 el(MediaUpload, {
@@ -114,7 +131,7 @@
                             onChange: (value) => setAttributes({ cameraPositionZ: value })
                         })
                     ),
-                    el(PanelBody, { title: 'Renderer Settings' },
+                    el(PanelBody, { title: 'Three.js Renderer Settings' },
                         el(TextControl, {
                             label: 'Renderer Width',
                             type: 'number',
@@ -126,6 +143,29 @@
                             type: 'number',
                             value: rendererHeight,
                             onChange: (value) => setAttributes({ rendererHeight: parseInt(value, 10) })
+                        })
+                    ),
+                    el(PanelBody, { title: 'Three.js Control Settings' },
+                        el(ToggleControl, {
+                            label: 'Enable Damping',
+                            checked: enableDamping,
+                            onChange: (value) => setAttributes({ enableDamping: value })
+                        }),
+                        el(RangeControl, {
+                            label: 'Damping Factor',
+                            value: dampingFactor,
+                            min: 0, max: 1, step: 0.01,
+                            onChange: (value) => setAttributes({ dampingFactor: value })
+                        }),
+                        el(ToggleControl, {
+                            label: 'Enable Zoom',
+                            checked: enableZoom,
+                            onChange: (value) => setAttributes({ enableZoom: value })
+                        }),
+                        el(ToggleControl, {
+                            label: 'Enable Pan',
+                            checked: enablePan,
+                            onChange: (value) => setAttributes({ enablePan: value })
                         })
                     )
                 ),
