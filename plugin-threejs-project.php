@@ -95,6 +95,15 @@ function render_threejs_project($attributes) {
         : '/wp-content/uploads/2024/09/Tree.glb'; // Default URL
     $file_type = isset($attributes['fileType']) ? $attributes['fileType'] : 'glb'; // Default to GLB
 
+    $camera_fov = isset($attributes['cameraFov']) ? esc_attr($attributes['cameraFov']) : 75; // Default FOV
+    $camera_aspect_ratio = isset($attributes['cameraAspectRatio']) ? esc_attr($attributes['cameraAspectRatio']) : 1.7777777778; // Default Aspect Ratio
+    $camera_position_x = isset($attributes['cameraPositionX']) ? esc_attr($attributes['cameraPositionX']) : 0; // Default X Position
+    $camera_position_y = isset($attributes['cameraPositionY']) ? esc_attr($attributes['cameraPositionY']) : 0; // Default Y Position
+    $camera_position_z = isset($attributes['cameraPositionZ']) ? esc_attr($attributes['cameraPositionZ']) : 5; // Default Z Position
+    
+    $renderer_width = isset($attributes['rendererWidth']) ? esc_attr($attributes['rendererWidth']) : 512; // Default Width
+    $renderer_height = isset($attributes['rendererHeight']) ? esc_attr($attributes['rendererHeight']) : 288; // Default Height
+
     ob_start();
     ?>
     <div class='canvas-container'>
@@ -102,15 +111,18 @@ function render_threejs_project($attributes) {
     </div>
     <script>
         const canvas = document.getElementById('canvas');
+
         var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, 16/9, 0.1, 1000);
-        camera.position.z = 15;
-        camera.position.y = 5;
-        camera.position.x = 5;
+
+        // Quote the aspect ratio because it's a string in JavaScript
+        var camera = new THREE.PerspectiveCamera(<?php echo $camera_fov; ?>, '<?php echo $camera_aspect_ratio; ?>', 0.1, 1000);
+        camera.position.x = <?php echo $camera_position_x; ?>;
+        camera.position.y = <?php echo $camera_position_y; ?>;
+        camera.position.z = <?php echo $camera_position_z; ?>;
 
         var renderer = new THREE.WebGLRenderer({canvas:canvas, alpha: true});
         renderer.setClearColor( 0x000000, 0 );
-        renderer.setSize(512, 288);
+        renderer.setSize(<?php echo $renderer_width; ?>, <?php echo $renderer_height; ?>);
         renderer.setPixelRatio(window.devicePixelRatio);
 
         // Set up the loader based on file type
