@@ -146,6 +146,7 @@
                         style: {
                             maxWidth: '100px',
                             marginTop: '10px',
+                            animation: 'spin 5s linear infinite',
                         }
                     }))
                 )
